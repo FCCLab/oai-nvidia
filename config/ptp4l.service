@@ -1,0 +1,20 @@
+[Unit]
+Description=Precision Time Protocol (PTP) service
+Documentation=man:ptp4l
+After=network.target
+
+[Service]
+Restart=always
+RestartSec=5s
+Type=simple
+ExecStartPre=ifconfig aerial00 up
+ExecStartPre=ethtool --set-priv-flags aerial00 tx_port_ts on
+ExecStartPre=ethtool -A aerial00 rx off tx off
+ExecStartPre=ifconfig aerial01 up
+ExecStartPre=ethtool --set-priv-flags aerial01 tx_port_ts on
+ExecStartPre=ethtool -A aerial01 rx off tx off
+ExecStart=taskset -c 41 /usr/sbin/ptp4l -f /etc/ptp.conf
+
+[Install]
+WantedBy=multi-user.target
+EOF

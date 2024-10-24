@@ -34,3 +34,9 @@ docker exec -it nv-cubb bash
 cd ran_build/build                     
 sudo ./nr-softmodem -O ../../../ci-scripts/conf_files/gnb-vnf.sa.band78.273prb.aerial.conf --log_config.global_log_options level,nocolor,time
 ```
+
+## PTP
+```
+ethtool -T aerial00| grep PTP | awk '{print $4}'
+cat /lib/systemd/system/phc2sys.service
+```
