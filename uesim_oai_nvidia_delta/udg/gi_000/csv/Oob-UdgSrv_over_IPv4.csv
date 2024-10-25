@@ -1,0 +1,4 @@
+Title,Index,En,IPv4,Netmask,SrvPort,SrvType
+Type,Index,Normal,Normal,Normal,Normal,Normal
+Access,Read_Only,Read_Only,Read_Only,Read_Only,Read_Only,Read_Only
+Value,1,0,192.168.60.14,255.255.255.0,50302,21
