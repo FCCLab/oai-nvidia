@@ -40,3 +40,9 @@ sudo ./nr-softmodem -O ../../../ci-scripts/conf_files/gnb-vnf.sa.band78.273prb.a
 ethtool -T aerial00| grep PTP | awk '{print $4}'
 cat /lib/systemd/system/phc2sys.service
 ```
+
+## N2N3
+```
+sudo ip address add 192.168.120.115/24 dev ens1f1
+sudo ip address add 5.5.5.115/24 dev ens1f1
+```

@@ -49,7 +49,7 @@ cuphydriver_config:
   pdsch_fallback: 0
   dpdk_file_prefix: cuphycontroller
   nics:
-    - nic: 0000:ab:00.0
+    - nic: 0000:2a:00.1
       mtu: 8192
       cpu_mbufs: 196608
       uplane_tx_handles: 64
@@ -105,9 +105,9 @@ cuphydriver_config:
       cell_id: 5
       ru_type: 1
       # set to 00:00:00:00:00:00 to use the MAC address of the NIC port to use
-      src_mac_addr: 00:00:00:00:00:00 
+      src_mac_addr: 9c:63:c0:a7:08:32
       dst_mac_addr: 6c:b9:c5:23:09:08 # MAC address of Delta
-      nic: 0000:ab:00.0
+      nic: 0000:2a:00.1
       vlan: 564
       pcp: 7
       txq_count_uplane: 1
@@ -115,17 +115,17 @@ cuphydriver_config:
       eAxC_id_pdcch: [0, 1, 2, 3]
       eAxC_id_pdsch: [0, 1, 2, 3]
       eAxC_id_csirs: [0, 1, 2, 3]
-      eAxC_id_pusch: [0, 1]
-      eAxC_id_pucch: [0, 1]
-      eAxC_id_srs: [0, 1]
-      eAxC_id_prach: [0, 1]
+      eAxC_id_pusch: [0, 1, 2, 3]
+      eAxC_id_pucch: [0, 1, 2, 3]
+      eAxC_id_srs: [0, 1, 2, 3]
+      eAxC_id_prach: [0, 1, 2, 3]
       dl_iq_data_fmt: {comp_meth: 1, bit_width: 9}
-      ul_iq_data_fmt: {comp_meth: 0, bit_width: 9}
+      ul_iq_data_fmt: {comp_meth: 1, bit_width: 9}
       section_3_time_offset: 484
-      fs_offset_dl: 15
+      fs_offset_dl: 7
       exponent_dl: 4
       ref_dl: 0
-      fs_offset_ul: -5
+      fs_offset_ul: 0
       exponent_ul: 4
       max_amp_ul: 65504
       mu: 1
