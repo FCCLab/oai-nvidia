@@ -103,7 +103,7 @@ cuphydriver_config:
   cells:
     - name: O-RU 0
       cell_id: 5
-      ru_type: 1
+      ru_type: 3
       # set to 00:00:00:00:00:00 to use the MAC address of the NIC port to use
       src_mac_addr: 9c:63:c0:a7:08:32
       dst_mac_addr: 6c:b9:c5:23:09:08 # MAC address of Delta
