@@ -49,7 +49,7 @@ cuphydriver_config:
   pdsch_fallback: 0
   dpdk_file_prefix: cuphycontroller
   nics:
-    - nic: 0000:2a:00.1
+    - nic: 0000:ab:00.0
       mtu: 8192
       cpu_mbufs: 196608
       uplane_tx_handles: 64
@@ -107,7 +107,7 @@ cuphydriver_config:
       # set to 00:00:00:00:00:00 to use the MAC address of the NIC port to use
       src_mac_addr: 9c:63:c0:a7:08:32
       dst_mac_addr: 6c:b9:c5:23:09:08 # MAC address of Delta
-      nic: 0000:2a:00.1
+      nic: 0000:ab:00.0
       vlan: 564
       pcp: 7
       txq_count_uplane: 1

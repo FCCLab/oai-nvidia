@@ -17,7 +17,7 @@ services:
             timeout: 2s
             retries: 10
         networks:
-            public_net:
+            oai-cn5g:
                 ipv4_address: 192.168.70.131
                 
     ims:
@@ -32,7 +32,7 @@ services:
             timeout: 2s
             retries: 10
         networks:
-            public_net:
+            oai-cn5g:
                 ipv4_address: 192.168.70.139
     oai-udr:
         container_name: "oai-udr"
@@ -48,7 +48,7 @@ services:
             - mysql
             - oai-nrf
         networks:
-            public_net:
+            oai-cn5g:
                 ipv4_address: 192.168.70.136
     oai-udm:
         container_name: "oai-udm"
@@ -63,7 +63,7 @@ services:
         depends_on:
             - oai-udr
         networks:
-            public_net:
+            oai-cn5g:
                 ipv4_address: 192.168.70.137
     oai-ausf:
         container_name: "oai-ausf"
@@ -78,7 +78,7 @@ services:
         depends_on:
             - oai-udm
         networks:
-            public_net:
+            oai-cn5g:
                 ipv4_address: 192.168.70.138
     oai-nrf:
         container_name: "oai-nrf"
@@ -91,7 +91,7 @@ services:
         environment:
             - TZ=Europe/Paris
         networks:
-            public_net:
+            oai-cn5g:
                 ipv4_address: 192.168.70.130
     oai-amf:
         container_name: "oai-amf"
@@ -109,7 +109,7 @@ services:
             - oai-nrf
             - oai-ausf
         networks:
-            public_net:
+            oai-cn5g:
                 ipv4_address: 192.168.70.132
     oai-smf:
         container_name: "oai-smf"
@@ -126,7 +126,7 @@ services:
             - oai-nrf
             - oai-amf
         networks:
-            public_net:
+            oai-cn5g:
                 ipv4_address: 192.168.70.133
     oai-upf:
         container_name: "oai-upf"
@@ -148,13 +148,13 @@ services:
             - ALL
         privileged: true
         networks:
-            public_net:
+            oai-cn5g:
                 ipv4_address: 192.168.70.134
 
 networks:
-    public_net:
+    oai-cn5g:
         driver: bridge
-        name: oai-cn5g-public-net
+        name: oai-cn5g
         ipam:
             config:
                 - subnet: 192.168.70.128/26
