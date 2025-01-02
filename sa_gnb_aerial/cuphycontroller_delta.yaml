@@ -71,7 +71,7 @@ cuphydriver_config:
     - 28
   workers_sched_priority: 95
   prometheus_thread: -1
-  start_section_id_srs: 3072
+  start_section_id_srs: 3072 # ############
   start_section_id_prach: 2048
   enable_ul_cuphy_graphs: 1
   enable_dl_cuphy_graphs: 1
@@ -97,7 +97,7 @@ cuphydriver_config:
   enable_dl_cqe_tracing: 0
   mMIMO_enable: 0
   pusch_forcedNumCsi2Bits: 0
-  enable_srs: 0
+  enable_srs: 1
   mCh_segment_proc_enable: 0
   enable_csip2_v3: 0
   cells:
@@ -145,6 +145,6 @@ cuphydriver_config:
       pusch_ldpc_algo_index: 0
       pusch_ldpc_flags: 2
       pusch_ldpc_use_half: 1
-      ul_gain_calibration: 48.68
+      ul_gain_calibration: 48.68 ######### RU vendor should give me
       lower_guard_bw: 845
       tv_pusch: cuPhyChEstCoeffs.h5
