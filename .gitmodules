@@ -1,3 +1,6 @@
 [submodule "openairinterface5g"]
 	path = openairinterface5g
 	url = https://github.com/FCCLab/openairinterface5g.git
+[submodule "cuBB"]
+	path = cuBB
+	url = https://github.com/FCCLab/cuBB.git

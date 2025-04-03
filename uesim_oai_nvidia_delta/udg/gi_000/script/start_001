@@ -1,6 +1,0 @@
-lOGTIME=`date +%Y-%m-%d-%H_%M_%S`
-
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-echo "Current script directory: $SCRIPT_DIR"
-
-startGiServer -v 4 -c 1 -d $SCRIPT_DIR/.. -l $SCRIPT_DIR/../log/$lOGTIME-Gi_Tstm_001.log.00
