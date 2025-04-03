@@ -68,3 +68,10 @@ $cuBB_SDK/pyaerial/container/run.sh
 cd $cuBB_SDK/pyaerial/notebooks
 jupyter lab --ip=0.0.0.0
 ```
+
+# Liteon RU
+```
+sshpass -p user ssh user@10.101.131.194
+en
+liteon168
+```

@@ -152,8 +152,8 @@ cuphydriver_config:
       mu: 1
       T1a_max_up_ns: 200000
       T1a_max_cp_ul_ns: 300000
-      Ta4_min_ns: 50000
-      Ta4_max_ns: 331000
+      Ta4_min_ns: 25000
+      Ta4_max_ns: 450000
       Tcp_adv_dl_ns: 100000
       fh_len_range: 0
       # pusch_nMaxRx: 2

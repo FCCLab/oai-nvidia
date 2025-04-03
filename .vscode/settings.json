@@ -76,6 +76,7 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "semaphore": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "nnls": "c"
     }
 }
