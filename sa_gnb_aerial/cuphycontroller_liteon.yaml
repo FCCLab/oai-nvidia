@@ -112,7 +112,7 @@ cuphydriver_config:
     - name: O-RU 0
       cell_id: 69
       # ru_type: 1
-      ru_type: 3
+      ru_type: 1
       # set to 00:00:00:00:00:00 to use the MAC address of the NIC port to use
       # DU mac in Liteon RU
       src_mac_addr: 9c:63:c0:a7:08:32
