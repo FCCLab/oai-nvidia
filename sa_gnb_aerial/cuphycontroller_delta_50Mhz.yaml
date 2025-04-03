@@ -28,8 +28,7 @@ low_priority_core: 8
 nic_tput_alert_threshold_mbps: 85000
 
 cuphydriver_config:
-# Fields added for data collection
-  # datalake_core: 9 # Isolalted core
+  # datalake_core: 0 # Isolalted core
   # datalake_address: localhost
   # datalake_samples: 1000000 # Number of samples to collect for each UE/RNTI. Defaults to 1M
   standalone: 0
@@ -113,16 +112,18 @@ cuphydriver_config:
       cell_id: 69
       # ru_type: 1
       ru_type: 3
-      src_mac_addr: 30:e0:90:74:00:22
-      dst_mac_addr: 6c:b9:c5:22:92:cc
+      # src_mac_addr: 30:e0:90:74:00:22
+      # dst_mac_addr: 6c:b9:c5:22:92:cc
+      src_mac_addr: 16:a1:17:72:f9:40
+      dst_mac_addr: 6c:b9:c5:23:09:08
       nic: 0000:2a:00.1
       vlan: 564
       pcp: 7
       txq_count_uplane: 1
-      eAxC_id_ssb_pbch: [0, 1]
-      eAxC_id_pdcch: [0, 1]
-      eAxC_id_pdsch: [0, 1]
-      eAxC_id_csirs: [0, 1]
+      eAxC_id_ssb_pbch: [0, 1, 2, 3]
+      eAxC_id_pdcch: [0, 1, 2, 3]
+      eAxC_id_pdsch: [0, 1, 2, 3]
+      eAxC_id_csirs: [0, 1, 2, 3]
       eAxC_id_pusch: [0, 1]
       eAxC_id_pucch: [0, 1]
       eAxC_id_srs: [0, 1]

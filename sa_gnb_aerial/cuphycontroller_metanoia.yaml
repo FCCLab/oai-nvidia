@@ -33,7 +33,7 @@ cuphydriver_config:
   num_slots: 8
   profiler_sec: 0
   log_level: DBG
-  dpdk_thread: 35
+  dpdk_thread: 8
   dpdk_verbose_logs: 0
   accu_tx_sched_res_ns: 500
   accu_tx_sched_disable: 0
@@ -49,7 +49,7 @@ cuphydriver_config:
   pdsch_fallback: 0
   dpdk_file_prefix: cuphycontroller
   nics:
-    - nic: 0000:ab:00.0
+    - nic: 0000:2a:00.1
       mtu: 8000
       cpu_mbufs: 196608
       uplane_tx_handles: 64
@@ -57,18 +57,18 @@ cuphydriver_config:
       rxq_count: 16
       txq_size: 8192
       rxq_size: 16384
-      gpu: 1
+      gpu: 0
   gpus:
-    - 1
+    - 0 
     # Set GPUID to the GPU sharing the PCIe switch as NIC
     # run nvidia-smi topo -m to find out which GPU
   workers_ul:
-    - 24
-    - 25
+    - 2
+    - 3
   workers_dl:
-    - 26
-    - 27
-    - 28
+    - 4
+    - 5
+    - 6
   workers_sched_priority: 95
   prometheus_thread: -1
   start_section_id_srs: 3072
@@ -107,7 +107,7 @@ cuphydriver_config:
       # set to 00:00:00:00:00:00 to use the MAC address of the NIC port to use
       src_mac_addr: 00:11:22:33:44:55 
       dst_mac_addr: 00:e0:0c:00:ae:06 # MAC address of Metanoia
-      nic: 0000:ab:00.0
+      nic: 0000:2a:00.1
       vlan: 3
       pcp: 7
       txq_count_uplane: 1
@@ -118,14 +118,14 @@ cuphydriver_config:
       eAxC_id_pusch: [0, 1, 2, 3]
       eAxC_id_pucch: [0, 1, 2, 3]
       eAxC_id_srs: [0, 1, 2, 3]
-      eAxC_id_prach: [0, 1, 2, 3]
+      eAxC_id_prach: [4, 5 , 6, 7]
       dl_iq_data_fmt: {comp_meth: 1, bit_width: 9}
       ul_iq_data_fmt: {comp_meth: 1, bit_width: 9}
       section_3_time_offset: 484
-      fs_offset_dl: 8
+      fs_offset_dl: 8 
       exponent_dl: 4
       ref_dl: 0
-      fs_offset_ul: 0
+      fs_offset_ul: -5
       exponent_ul: 4
       max_amp_ul: 65504
       mu: 1

@@ -18,7 +18,7 @@ make -j32
 
 ```
 cd openairinterface5g/cmake_targets
-./build_oai -w AERIAL --gNB --ninja
+./build_oai -w AERIAL --gNB --ninja --build-e2
 ```
 
 ## Run
@@ -45,4 +45,26 @@ cat /lib/systemd/system/phc2sys.service
 ```
 sudo ip address add 192.168.120.115/24 dev ens1f1
 sudo ip address add 5.5.5.115/24 dev ens1f1
+```
+
+```
+jupyter lab password
+jupyter notebook
+```
+
+# pyAerial
+```
+docker run --rm -d --name cuBB <container image file>
+docker cp cuBB:/opt/nvidia/cuBB cuBB
+docker stop cuBB
+cd cuBB
+
+export cuBB_SDK=`pwd`
+AERIAL_BASE_IMAGE=nvcr.io/qhrjhjrvlsbu/aerial-cuda-accelerated-ran:24-3-cubb $cuBB_SDK/pyaerial/container/build.sh
+
+export cuBB_SDK=`pwd`
+$cuBB_SDK/pyaerial/container/run.sh
+
+cd $cuBB_SDK/pyaerial/notebooks
+jupyter lab --ip=0.0.0.0
 ```

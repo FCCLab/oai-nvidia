@@ -119,10 +119,10 @@ cuphydriver_config:
       vlan: 564
       pcp: 7
       txq_count_uplane: 1
-      eAxC_id_ssb_pbch: [0, 1]
-      eAxC_id_pdcch: [0, 1]
-      eAxC_id_pdsch: [0, 1]
-      eAxC_id_csirs: [0, 1]
+      eAxC_id_ssb_pbch: [0, 1, 2, 3]
+      eAxC_id_pdcch: [0, 1, 2, 3]
+      eAxC_id_pdsch: [0, 1, 2, 3]
+      eAxC_id_csirs: [0, 1, 2, 3]
       eAxC_id_pusch: [0, 1]
       eAxC_id_pucch: [0, 1]
       eAxC_id_srs: [0, 1]
@@ -165,6 +165,6 @@ cuphydriver_config:
       pusch_ldpc_algo_index: 0
       pusch_ldpc_flags: 2
       pusch_ldpc_use_half: 1
-      ul_gain_calibration: 0
+      ul_gain_calibration: 48.68
       lower_guard_bw: 845
       tv_pusch: cuPhyChEstCoeffs.h5
