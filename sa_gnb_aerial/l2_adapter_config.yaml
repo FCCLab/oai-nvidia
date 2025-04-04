@@ -125,12 +125,12 @@ transport:
     debug_timing: 0
     pcap_enable: 0
     # ---- 24.3
-    pcap_shm_caching_cpu_core: 10 # CPU core of pcap shared memory caching thread
-    pcap_file_saving_cpu_core: 10 # CPU core of pcap file saving thread
+    pcap_shm_caching_cpu_core: 12 # CPU core of pcap shared memory caching thread
+    pcap_file_saving_cpu_core: 12 # CPU core of pcap file saving thread
     msg_filter: [] # Example: [0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x80, 0x81, 0x82, 0x83, 0x84, 0x85]
     cell_filter: [] # Example: [0, 1, 2, 3]
     # ----
-    pcap_cpu_core: 11 # CPU core of background pcap log save thread
+    pcap_cpu_core: 13 # CPU core of background pcap log save thread
     pcap_cache_size_bits: 29 # 2^29 = 512MB, size of /dev/shm/${prefix}_pcap
     pcap_file_size_bits: 31 # 2^31 = 2GB, max size of /var/log/aerial/${prefix}_pcap. Requires pcap_file_size_bits > pcap_cache_size_bits.
     pcap_max_data_size: 8000 # Max DL/UL FAPI data size to capture reduce pcap size.

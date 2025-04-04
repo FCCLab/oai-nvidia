@@ -1,0 +1,43 @@
+# If you change this file, run 'update-grub' afterwards to update
+# /boot/grub/grub.cfg.
+# For full documentation of the options in this file, see:
+#   info -f grub -n 'Simple configuration'
+
+GRUB_DEFAULT="Advanced options for Ubuntu>Ubuntu, with Linux 5.15.0-1042-nvidia-lowlatency"
+GRUB_TIMEOUT_STYLE=hidden
+GRUB_TIMEOUT=0
+GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
+# 1 card
+GRUB_CMDLINE_LINUX_DEFAULT="pci=realloc=off default_hugepagesz=1G hugepagesz=1G hugepages=32 tsc=reliable clocksource=tsc intel_idle.max_cstate=0 mce=ignore_ce processor.max_cstate=0 intel_pstate=disable audit=0 idle=poll rcu_nocb_poll nosoftlockup iommu=off irqaffinity=12-47 isolcpus=managed_irq,domain,0-11 nohz_full=0-11 rcu_nocbs=0-11 noht numa_balancing=disable pci=realloc=off default_hugepagesz=1G hugepagesz=1G hugepages=32 tsc=reliable clocksource=tsc intel_idle.max_cstate=0 mce=ignore_ce processor.max_cstate=0 intel_pstate=disable audit=0 idle=poll rcu_nocb_poll nosoftlockup iommu=off irqaffinity=12-47 isolcpus=managed_irq,domain,0-11 nohz_full=0-11 rcu_nocbs=0-11 noht numa_balancing=disable"
+# Dont know
+#GRUB_CMDLINE_LINUX="isolcpus=managed_irq,domain,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 nohz_full=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 rcu_nocbs=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15 kthread_cpus=24-47 skew_tick=1 rcu_nocb_poll intel_pstate=disable nosoftlockup cgroup_disable=memory mce=off tsc=reliable intel_iommu=on intel_iommu=pt hugepagesz=1G hugepages=40 hugepagesz=2M hugepages=0 default_hugepagesz=1G"
+
+# 2 cards
+#GRUB_CMDLINE_LINUX_DEFAULT="pci=realloc=off default_hugepagesz=1G hugepagesz=1G hugepages=32 tsc=reliable clocksource=tsc intel_idle.max_cstate=0 mce=ignore_ce processor.max_cstate=0 intel_pstate=disable audit=0 idle=poll rcu_nocb_poll nosoftlockup iommu=off irqaffinity=10-23,34-47 isolcpus=managed_irq,domain,0-9,24-33 nohz_full=0-9,24-33 rcu_nocbs=0-9,24-33 noht numa_balancing=disable pci=realloc=off default_hugepagesz=1G hugepagesz=1G hugepages=32 tsc=reliable clocksource=tsc intel_idle.max_cstate=0 mce=ignore_ce processor.max_cstate=0 intel_pstate=disable audit=0 idle=poll rcu_nocb_poll nosoftlockup iommu=off irqaffinity=10-23,34-47 isolcpus=managed_irq,domain,0-9,24-33 nohz_full=0-9,24-33 rcu_nocbs=0-9,24-33 noht numa_balancing=disable"
+
+
+# Uncomment to enable BadRAM filtering, modify to suit your needs
+# This works with Linux (no patch required) and with any kernel that obtains
+# the memory map information from GRUB (GNU Mach, kernel of FreeBSD ...)
+#GRUB_BADRAM="0x01234567,0xfefefefe,0x89abcdef,0xefefefef"
+
+# Uncomment to disable graphical terminal (grub-pc only)
+#GRUB_TERMINAL=console
+
+# The resolution used on graphical terminal
+# note that you can use only modes which your graphic card supports via VBE
+# you can see them in real GRUB with the command `vbeinfo'
+#GRUB_GFXMODE=640x480
+
+# Uncomment if you don't want GRUB to pass "root=UUID=xxx" parameter to Linux
+#GRUB_DISABLE_LINUX_UUID=true
+
+# Uncomment to disable generation of recovery mode menu entries
+#GRUB_DISABLE_RECOVERY="true"
+
+# Uncomment to get a beep at grub start
+#GRUB_INIT_TUNE="480 440 1"
+#
+#GRUB_CMDLINE_LINUX_DEFAULT=“iommu=pt intel_iommu=on rd.driver.blacklist=nouveau”
+#GRUB_CMDLINE_LINUX_DEFAULT=“iommu=pt intel_iommu=on"
+

@@ -37,11 +37,11 @@ cuphydriver_config:
   num_slots: 8
   profiler_sec: 0
   log_level: DBG
-  dpdk_thread: 8
+  dpdk_thread: 10
   dpdk_verbose_logs: 0
   accu_tx_sched_res_ns: 500
   accu_tx_sched_disable: 0
-  fh_stats_dump_cpu_core: 8
+  fh_stats_dump_cpu_core: 11
   pdump_client_thread: -1
   mps_sm_pusch: 84
   mps_sm_pucch: 16
@@ -115,23 +115,23 @@ cuphydriver_config:
       ru_type: 1
       # set to 00:00:00:00:00:00 to use the MAC address of the NIC port to use
       # DU mac in Liteon RU
-      src_mac_addr: 9c:63:c0:a7:08:32
+      src_mac_addr: 68:05:ca:fb:95:70
       # DU mac in Liteon RU
       # src_mac_addr: 68:05:ca:fb:95:70
-      dst_mac_addr: e8:c7:4f:25:89:40 # MAC address of Liteon RU
+      dst_mac_addr: e8:c7:4f:25:89:45 # MAC address of Liteon RU
       # dst_mac_addr: 6c:b9:c5:23:09:08 # MAC address of Delta RU
       nic: 0000:2a:00.1
-      vlan: 567
+      vlan: 564
       pcp: 7
       txq_count_uplane: 1
-      eAxC_id_ssb_pbch: [0, 1]
-      eAxC_id_pdcch: [0, 1]
-      eAxC_id_pdsch: [0, 1]
-      eAxC_id_csirs: [0, 1]
-      eAxC_id_pusch: [0, 1]
-      eAxC_id_pucch: [0, 1]
-      eAxC_id_srs: [0, 1]
-      eAxC_id_prach: [0, 1]
+      eAxC_id_ssb_pbch: [1, 2]
+      eAxC_id_pdcch: [1, 2]
+      eAxC_id_pdsch: [1, 2]
+      eAxC_id_csirs: [1, 2]
+      eAxC_id_pusch: [3]
+      eAxC_id_pucch: [3]
+      eAxC_id_srs: [3]
+      eAxC_id_prach: [4]
       dl_iq_data_fmt: {comp_meth: 1, bit_width: 9}
       ul_iq_data_fmt: {comp_meth: 1, bit_width: 9}
       section_3_time_offset: 484
@@ -142,7 +142,7 @@ cuphydriver_config:
       # fs_offset_dl: 0 -> PDSCH power per RE: -2 dBm
       # fs_offset_dl: 5 -> PDSCH power pwer RE: -10.85
       # fs_offset_dl: 12 -> PDSCH power per RE: -20 dBm
-      fs_offset_dl: 12
+      fs_offset_dl: 16
       # fs_offset_dl: 16
       # fs_offset_dl: 12
  
