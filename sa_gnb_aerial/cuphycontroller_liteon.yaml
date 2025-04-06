@@ -147,7 +147,7 @@ cuphydriver_config:
       # fs_offset_dl: 12
  
       # Decrease fs_offset_dl will increase the IQ value
-      fs_offset_ul: -5
+      fs_offset_ul: -10
       max_amp_ul: 65504
       mu: 1
       T1a_max_up_ns: 200000
