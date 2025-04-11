@@ -29,9 +29,9 @@ nic_tput_alert_threshold_mbps: 85000
  
 cuphydriver_config:
 # Fields added for data collection
-  datalake_core: 9 # Isolalted core
-  datalake_address: localhost
-  datalake_samples: 1000000 # Number of samples to collect for each UE/RNTI. Defaults to 1M
+  # datalake_core: 9 # Isolalted core
+  # datalake_address: localhost
+  # datalake_samples: 1000000 # Number of samples to collect for each UE/RNTI. Defaults to 1M
   standalone: 0
   validation: 0
   num_slots: 8
@@ -114,12 +114,8 @@ cuphydriver_config:
       # ru_type: 1
       ru_type: 1
       # set to 00:00:00:00:00:00 to use the MAC address of the NIC port to use
-      # DU mac in Liteon RU
-      src_mac_addr: 68:05:ca:fb:95:70
-      # DU mac in Liteon RU
-      # src_mac_addr: 68:05:ca:fb:95:70
-      dst_mac_addr: e8:c7:4f:25:89:45 # MAC address of Liteon RU
-      # dst_mac_addr: 6c:b9:c5:23:09:08 # MAC address of Delta RU
+      src_mac_addr: 9c:63:c0:a7:08:32
+      dst_mac_addr: e8:c7:4f:25:89:40
       nic: 0000:2a:00.1
       vlan: 564
       pcp: 7
@@ -131,7 +127,7 @@ cuphydriver_config:
       eAxC_id_pusch: [3]
       eAxC_id_pucch: [3]
       eAxC_id_srs: [3]
-      eAxC_id_prach: [4]
+      eAxC_id_prach: [0]
       dl_iq_data_fmt: {comp_meth: 1, bit_width: 9}
       ul_iq_data_fmt: {comp_meth: 1, bit_width: 9}
       section_3_time_offset: 484
