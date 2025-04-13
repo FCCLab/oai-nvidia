@@ -78,6 +78,14 @@
         "semaphore": "cpp",
         "future": "cpp",
         "nnls": "c",
-        "*.inc": "cpp"
-    }
+        "*.inc": "cpp",
+        "ran_func_mac.h": "c",
+        "ran_context.h": "c",
+        "nr_rrc_defs.h": "c",
+        "mac_proto.h": "c",
+        "sm_io.h": "c"
+    },
+    "cSpell.words": [
+        "mtrx"
+    ]
 }
