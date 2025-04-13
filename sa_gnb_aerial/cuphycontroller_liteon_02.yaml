@@ -22,11 +22,11 @@
 ---
 l2adapter_filename: l2_adapter_config.yaml
 aerial_metrics_backend_address: 127.0.0.2:8081
- 
+
 # CPU core shared by all low-priority threads
 low_priority_core: 8
 nic_tput_alert_threshold_mbps: 85000
- 
+
 cuphydriver_config:
 # Fields added for data collection
   # datalake_core: 9 # Isolalted core
@@ -111,23 +111,26 @@ cuphydriver_config:
   cells:
     - name: O-RU 0
       cell_id: 69
-      # ru_type: 1
       ru_type: 1
       # set to 00:00:00:00:00:00 to use the MAC address of the NIC port to use
+      # DU mac in Liteon RU
       src_mac_addr: 9c:63:c0:a7:08:32
+      # DU mac in Liteon RU
       dst_mac_addr: e8:c7:4f:25:89:40
+      # dst_mac_addr: 6c:b9:c5:23:09:08 # MAC address of Delta RU
       nic: 0000:2a:00.1
+      # vlan: 567
       vlan: 3
       pcp: 7
       txq_count_uplane: 1
-      eAxC_id_ssb_pbch: [1, 2]
-      eAxC_id_pdcch: [1, 2]
-      eAxC_id_pdsch: [1, 2]
-      eAxC_id_csirs: [1, 2]
-      eAxC_id_pusch: [3]
-      eAxC_id_pucch: [3]
-      eAxC_id_srs: [3]
-      eAxC_id_prach: [0]
+      eAxC_id_ssb_pbch: [1,2]
+      eAxC_id_pdcch: [1,2]
+      eAxC_id_pdsch: [1,2]
+      eAxC_id_csirs: [1,2]
+      eAxC_id_pusch: [1]
+      eAxC_id_pucch: [1]
+      eAxC_id_srs: [1]
+      eAxC_id_prach: [1]
       dl_iq_data_fmt: {comp_meth: 1, bit_width: 9}
       ul_iq_data_fmt: {comp_meth: 1, bit_width: 9}
       section_3_time_offset: 484
@@ -135,21 +138,21 @@ cuphydriver_config:
       exponent_ul: 4
       ref_dl: 0
       # Decrease fs_offset_dl will increase TX power
-      # fs_offset_dl: 0 -> PDSCH power per RE: -2 dBm
-      # fs_offset_dl: 5 -> PDSCH power pwer RE: -10.85
+      # fs_offset_dl: 0 -> PDSCH power per RE: -2 dBm 
+      # fs_offset_dl: 5 -> PDSCH power pwer RE: -10.85 
       # fs_offset_dl: 12 -> PDSCH power per RE: -20 dBm
       fs_offset_dl: 16
       # fs_offset_dl: 16
       # fs_offset_dl: 12
- 
+
       # Decrease fs_offset_dl will increase the IQ value
-      fs_offset_ul: -10
+      fs_offset_ul: -5
       max_amp_ul: 65504
       mu: 1
       T1a_max_up_ns: 200000
       T1a_max_cp_ul_ns: 300000
-      Ta4_min_ns: 25000
-      Ta4_max_ns: 450000
+      Ta4_min_ns: 50000
+      Ta4_max_ns: 331000
       Tcp_adv_dl_ns: 100000
       fh_len_range: 0
       # pusch_nMaxRx: 2

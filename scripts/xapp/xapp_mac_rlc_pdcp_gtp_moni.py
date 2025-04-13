@@ -1,6 +1,9 @@
 import sys
 import time
 import select
+import ctypes
+import functools
+import logging
 
 import numpy as np
 
@@ -17,11 +20,18 @@ DATALAKE_PORT = 9000
 DATALAKE_USER = 'default'
 DATALAKE_PASSWORD = ''
 DATALAKE_DB_NAME = 'default'
-DATALAKE_TABLE_MAC_NAME = 'MAC_KPIs'
+DATALAKE_TABLE_MAC_NAME = 'MAC_KPIs_2'
 DATALAKE_TABLE_RLC_NAME = 'RLC_KPIs'
 DATALAKE_TABLE_PDCP_NAME = 'PDCP_KPIs'
 DATALAKE_TABLE_GTP_NAME = 'GTP_KPIs'
 DATALAKE_PUSH_INTERVAL = 0.05
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
+logger = logging.getLogger(__name__)
 
 ####################
 #### Base Callback Class for ClickHouse
@@ -70,7 +80,7 @@ class BaseCallback:
 
             if time.time() - self.log_time > 1.0:
                 self.log_time = time.time()
-                print(f"Insert to database {self.database}: {data}")
+                # print(f"Insert to database {self.database}: {data}")
             try:
                 self.client.execute(
                     f"INSERT INTO {self.database}.{self.table_name} VALUES",
@@ -78,6 +88,8 @@ class BaseCallback:
                 )
             except Exception as e:
                 print(f"Error while inserting data into ClickHouse: {e}")
+        # else:
+        #     print(f"Skipping push to datalake for {self.database}")
 
     def get_current_timestamps(self):
         # Get system timestamps in datetime64(9) format
@@ -85,6 +97,40 @@ class BaseCallback:
         ts_tai_ns = now
         ts_sw_ns = now
         return ts_tai_ns, ts_sw_ns
+
+####################
+#### Callback Handler Decorator
+####################
+
+class CallbackHandler:
+    def __init__(self, name):
+        self.name = name
+
+    def __call__(self, func):
+        @functools.wraps(func)
+        def wrapper(self_instance, ind):
+            start_time = time.time()
+            try:
+                # logger.info(f"Starting {self.name} callback handler")
+                
+                # Validate input
+                if not hasattr(ind, 'tstamp'):
+                    logger.error(f"Invalid indication object for {self.name}: missing tstamp")
+                    return
+                
+                # Call the original handler
+                result = func(self_instance, ind)
+                
+                # Log timing
+                duration = time.time() - start_time
+                # logger.info(f"{self.name} callback completed in {duration:.3f} seconds")
+                
+                return result
+                
+            except Exception as e:
+                logger.error(f"Error in {self.name} callback handler: {str(e)}")
+                
+        return wrapper
 
 ####################
 #### MAC INDICATION CALLBACK
@@ -115,16 +161,17 @@ class MACCallback(BaseCallback, ric.mac_cb):
             dl_bler Float32,
             ul_bler Float32,
 
-            # dl_harq_0 UInt32,
-            # dl_harq_1 UInt32,
-            # dl_harq_2 UInt32,
-            # dl_harq_3 UInt32,
-            # dl_harq_4 UInt32,
-            # ul_harq_0 UInt32,
-            # ul_harq_1 UInt32,
-            # ul_harq_2 UInt32,
-            # ul_harq_3 UInt32,
-            # ul_harq_4 UInt32,
+            dl_harq_0 UInt32,
+            dl_harq_1 UInt32,
+            dl_harq_2 UInt32,
+            dl_harq_3 UInt32,
+            dl_harq_4 UInt32,
+
+            ul_harq_0 UInt32,
+            ul_harq_1 UInt32,
+            ul_harq_2 UInt32,
+            ul_harq_3 UInt32,
+            ul_harq_4 UInt32,
 
             rnti UInt32,
             dl_aggr_prb UInt32,
@@ -138,14 +185,26 @@ class MACCallback(BaseCallback, ric.mac_cb):
             frame UInt32,
             slot UInt32,
 
-            wb_cqi UInt8,
+            cri UInt32,
+            ri UInt32,
+            li UInt32,
+            pmi_x1 UInt32,
+            pmi_x2 UInt32,
+            wb_cqi_1tb UInt32,
+            wb_cqi_2tb UInt32,
+            cqi_table UInt32,
+            csi_report_id UInt32,
+
             dl_mcs1 UInt8,
             ul_mcs1 UInt8,
             dl_mcs2 UInt8,
             ul_mcs2 UInt8,
             phr Int8,
 
-            rsrp Int32,
+            rsrp Int64,
+            ss_rsrp Int32,
+            ss_rsrq Float32,
+            ss_sinr Float32,
 
             latency Float64,
         ) ENGINE = MergeTree()
@@ -154,13 +213,68 @@ class MACCallback(BaseCallback, ric.mac_cb):
         """
         self.client.execute(create_table_query)
 
+    @CallbackHandler("MAC")
     def handle(self, ind):
         if len(ind.ue_stats) > 0:
             t_now = time.time_ns() / 1_000_000
             t_mac = ind.tstamp / 1_000
             t_diff = t_now - t_mac
             ts_tai_ns, ts_sw_ns = self.get_current_timestamps()
-            # print(ul_harq)
+            
+            dl_harqs = []
+            # Assume `ind` is your SWIG-wrapped object
+            dl_harq_ptr = ind.ue_stats[0].dl_harq
+            # print("SWIG object:", dl_harq_ptr)
+            # print("SWIG object methods:", dir(dl_harq_ptr))
+            # Check if the pointer is valid
+            if dl_harq_ptr is not None:
+                try:
+                    # Get the raw pointer address using __int__
+                    raw_ptr = int(dl_harq_ptr)  # Calls __int__ to get the memory address
+                    print(f"Raw pointer address: {hex(raw_ptr)}")
+
+                    # Define the array type: 5 elements of uint32_t
+                    Uint32Array = ctypes.c_uint32 * 5
+                    # Interpret the raw pointer as an array
+                    dl_harqs = Uint32Array.from_address(raw_ptr)
+                    
+                    # Print each element
+                    # for i in range(5):
+                    #     print(f"Element {i}: {dl_harqs[i]}")
+                except Exception as e:
+                    print("Error: %s" % e)
+            else:
+                print("Pointer is null")
+
+            ul_harqs = []
+            ul_harq_ptr = ind.ue_stats[0].ul_harq
+            # print("SWIG object:", ul_harq_ptr)
+            # print("SWIG object methods:", dir(ul_harq_ptr))
+            # Check if the pointer is valid
+            if ul_harq_ptr is not None:  
+                try:    
+                    # Get the raw pointer address using __int__
+                    raw_ptr = int(ul_harq_ptr)  # Calls __int__ to get the memory address
+                    print(f"Raw pointer address: {hex(raw_ptr)}")
+                    # Define the array type: 5 elements of uint32_t
+                    Uint32Array = ctypes.c_uint32 * 5
+                    # Interpret the raw pointer as an array
+                    ul_harqs = Uint32Array.from_address(raw_ptr)
+                    # Print each element
+                    # for i in range(5):  
+                    #     print(f"Element {i}: {ul_harqs[i]}")    
+                except Exception as e:
+                    print("Error: %s" % e)
+            else:
+                print("Pointer is null")
+
+            if len(dl_harqs) != 5:
+                print(f"dl_harqs length: {len(dl_harqs)}")
+                return
+            if len(ul_harqs) != 5:
+                print(f"ul_harqs length: {len(ul_harqs)}")
+                return
+            
             data_to_insert = [
                 {
                     "TsTaiNs": ts_tai_ns,
@@ -180,18 +294,18 @@ class MACCallback(BaseCallback, ric.mac_cb):
                     "dl_bler": ue_stat.dl_bler,
                     "ul_bler": ue_stat.ul_bler,
 
-                    # "dl_harq_0": dl_harq[0],
-                    # "dl_harq_1": dl_harq[1],
-                    # "dl_harq_2": dl_harq[2],
-                    # "dl_harq_3": dl_harq[3],
-                    # "dl_harq_4": dl_harq[4],
+                    "dl_harq_0": dl_harqs[0],
+                    "dl_harq_1": dl_harqs[1],
+                    "dl_harq_2": dl_harqs[2],
+                    "dl_harq_3": dl_harqs[3],
+                    "dl_harq_4": dl_harqs[4],
 
-                    # "ul_harq_0": ul_harq[0],
-                    # "ul_harq_1": ul_harq[1],
-                    # "ul_harq_2": ul_harq[2],
-                    # "ul_harq_3": ul_harq[3],
-                    # "ul_harq_4": ul_harq[4],
-
+                    "ul_harq_0": ul_harqs[0],
+                    "ul_harq_1": ul_harqs[1],
+                    "ul_harq_2": ul_harqs[2],
+                    "ul_harq_3": ul_harqs[3],
+                    "ul_harq_4": ul_harqs[4],
+                    
                     "rnti": ue_stat.rnti,
                     "dl_aggr_prb": ue_stat.dl_aggr_prb,
                     "ul_aggr_prb": ue_stat.ul_aggr_prb,
@@ -204,7 +318,16 @@ class MACCallback(BaseCallback, ric.mac_cb):
                     "frame": ue_stat.frame,
                     "slot": ue_stat.slot,
 
-                    "wb_cqi": ue_stat.wb_cqi,
+                    "cri": ue_stat.cri,
+                    "ri": ue_stat.ri,
+                    "li": ue_stat.li,
+                    "pmi_x1": ue_stat.pmi_x1,
+                    "pmi_x2": ue_stat.pmi_x2,
+                    "wb_cqi_1tb": ue_stat.wb_cqi_1tb,
+                    "wb_cqi_2tb": ue_stat.wb_cqi_2tb,
+                    "cqi_table": ue_stat.cqi_table,
+                    "csi_report_id": ue_stat.csi_report_id,
+
                     "dl_mcs1": ue_stat.dl_mcs1,
                     "ul_mcs1": ue_stat.ul_mcs1,
                     "dl_mcs2": ue_stat.dl_mcs2,
@@ -212,11 +335,18 @@ class MACCallback(BaseCallback, ric.mac_cb):
                     "phr": ue_stat.phr,
                     
                     "rsrp": ue_stat.rsrp,
+                    "ss_rsrp": ue_stat.ss_rsrp,
+                    "ss_rsrq": ue_stat.ss_rsrq,
+                    "ss_sinr": ue_stat.ss_sinr,
 
                     "latency": t_diff,
                 }
                 for ue_stat in ind.ue_stats
-            ]
+            ]  
+            print(f"Data to insert: {data_to_insert}")
+            # print(f'RSRP {ind.ue_stats[0].rsrp}')
+            # print(f"SS RSRP {ind.ue_stats[0].ss_rsrp}, SS RSRQ {ind.ue_stats[0].ss_rsrq}, SS SINR {ind.ue_stats[0].ss_sinr}")
+            # print(f'CRI {ind.ue_stats[0].cri}, RI {ind.ue_stats[0].ri}, LI {ind.ue_stats[0].li}, pmi_x1 {ind.ue_stats[0].pmi_x1}, pmi_x2 {ind.ue_stats[0].pmi_x2}, wb_cqi_1tb {ind.ue_stats[0].wb_cqi_1tb}, wb_cqi_2tb {ind.ue_stats[0].wb_cqi_2tb}, cqi_table {ind.ue_stats[0].cqi_table}, csi_report_id {ind.ue_stats[0].csi_report_id}')
 
             self.push_to_datalake(data_to_insert)
 
@@ -253,6 +383,7 @@ class RLCCallback(BaseCallback, ric.rlc_cb):
         """
         self.client.execute(create_table_query)
 
+    @CallbackHandler("RLC")
     def handle(self, ind):
         if len(ind.rb_stats) > 0:
             t_now = time.time_ns() / 1_000_000
@@ -310,6 +441,7 @@ class PDCPCallback(BaseCallback, ric.pdcp_cb):
         """
         self.client.execute(create_table_query)
 
+    @CallbackHandler("PDCP")
     def handle(self, ind):
         if len(ind.rb_stats) > 0:
             t_now = time.time_ns() / 1_000_000
@@ -361,6 +493,7 @@ class GTPCallback(BaseCallback, ric.gtp_cb):
         """
         self.client.execute(create_table_query)
 
+    @CallbackHandler("GTP")
     def handle(self, ind):
         if len(ind.gtp_stats) > 0:
             t_now = time.time_ns() / 1_000_000

@@ -4,3 +4,6 @@
 [submodule "cuBB"]
 	path = cuBB
 	url = https://github.com/FCCLab/cuBB.git
+[submodule "kobuki"]
+	path = kobuki
+	url = https://github.com/tuannv-github/kobuki.git
