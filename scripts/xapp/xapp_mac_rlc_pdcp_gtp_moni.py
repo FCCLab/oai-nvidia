@@ -10,7 +10,7 @@ import numpy as np
 import xapp_sdk as ric
 import time
 from clickhouse_driver import Client
-from datetime import datetime, timezone
+from datetime import datetime, timezone, timedelta
 
 ####################
 #### Configuration Constants
@@ -76,6 +76,7 @@ class BaseCallback:
 
     def push_to_datalake(self, data):
         if time.time() - self.push_time > DATALAKE_PUSH_INTERVAL:
+            print(f"Data to insert: {data}")
             self.push_time = time.time()
 
             if time.time() - self.log_time > 1.0:
@@ -95,6 +96,7 @@ class BaseCallback:
         # Get system timestamps in datetime64(9) format
         now = datetime.now(timezone.utc)
         ts_tai_ns = now
+        # ts_tai_ns = now + timedelta(seconds=37)
         ts_sw_ns = now
         return ts_tai_ns, ts_sw_ns
 
@@ -231,7 +233,7 @@ class MACCallback(BaseCallback, ric.mac_cb):
                 try:
                     # Get the raw pointer address using __int__
                     raw_ptr = int(dl_harq_ptr)  # Calls __int__ to get the memory address
-                    print(f"Raw pointer address: {hex(raw_ptr)}")
+                    # print(f"Raw pointer address: {hex(raw_ptr)}")
 
                     # Define the array type: 5 elements of uint32_t
                     Uint32Array = ctypes.c_uint32 * 5
@@ -255,7 +257,7 @@ class MACCallback(BaseCallback, ric.mac_cb):
                 try:    
                     # Get the raw pointer address using __int__
                     raw_ptr = int(ul_harq_ptr)  # Calls __int__ to get the memory address
-                    print(f"Raw pointer address: {hex(raw_ptr)}")
+                    # print(f"Raw pointer address: {hex(raw_ptr)}")
                     # Define the array type: 5 elements of uint32_t
                     Uint32Array = ctypes.c_uint32 * 5
                     # Interpret the raw pointer as an array
@@ -343,7 +345,6 @@ class MACCallback(BaseCallback, ric.mac_cb):
                 }
                 for ue_stat in ind.ue_stats
             ]  
-            print(f"Data to insert: {data_to_insert}")
             # print(f'RSRP {ind.ue_stats[0].rsrp}')
             # print(f"SS RSRP {ind.ue_stats[0].ss_rsrp}, SS RSRQ {ind.ue_stats[0].ss_rsrq}, SS SINR {ind.ue_stats[0].ss_sinr}")
             # print(f'CRI {ind.ue_stats[0].cri}, RI {ind.ue_stats[0].ri}, LI {ind.ue_stats[0].li}, pmi_x1 {ind.ue_stats[0].pmi_x1}, pmi_x2 {ind.ue_stats[0].pmi_x2}, wb_cqi_1tb {ind.ue_stats[0].wb_cqi_1tb}, wb_cqi_2tb {ind.ue_stats[0].wb_cqi_2tb}, cqi_table {ind.ue_stats[0].cqi_table}, csi_report_id {ind.ue_stats[0].csi_report_id}')
@@ -538,15 +539,15 @@ def main():
             mac_handler = ric.report_mac_sm(node.id, ric.Interval_ms_10, mac_cb)
             mac_handlers.append(mac_handler)
 
-            # Create and start RLC handler
-            rlc_cb = RLCCallback(DATALAKE_DB_NAME, DATALAKE_TABLE_RLC_NAME)
-            rlc_handler = ric.report_rlc_sm(node.id, ric.Interval_ms_10, rlc_cb)
-            rlc_handlers.append(rlc_handler)
+            # # Create and start RLC handler
+            # rlc_cb = RLCCallback(DATALAKE_DB_NAME, DATALAKE_TABLE_RLC_NAME)
+            # rlc_handler = ric.report_rlc_sm(node.id, ric.Interval_ms_10, rlc_cb)
+            # rlc_handlers.append(rlc_handler)
 
-            # Create and start PDCP handler
-            pdcp_cb = PDCPCallback(DATALAKE_DB_NAME, DATALAKE_TABLE_PDCP_NAME)
-            pdcp_handler = ric.report_pdcp_sm(node.id, ric.Interval_ms_10, pdcp_cb)
-            pdcp_handlers.append(pdcp_handler)
+            # # Create and start PDCP handler
+            # pdcp_cb = PDCPCallback(DATALAKE_DB_NAME, DATALAKE_TABLE_PDCP_NAME)
+            # pdcp_handler = ric.report_pdcp_sm(node.id, ric.Interval_ms_10, pdcp_cb)
+            # pdcp_handlers.append(pdcp_handler)
 
             # Create and start GTP handler
             # gtp_cb = GTPCallback(DATALAKE_DB_NAME, DATALAKE_TABLE_GTP_NAME)

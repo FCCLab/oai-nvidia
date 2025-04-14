@@ -6,7 +6,7 @@ import sys
 # Define your ClickHouse connection parameters
 HOST = "172.27.2.22"
 PORT = 9000  # Assuming native protocol port works based on prior troubleshooting
-TABLE = "iperf3db"
+TABLE = "wgn"
 
 # Get DROP_ID from command-line argument
 if len(sys.argv) < 2:
