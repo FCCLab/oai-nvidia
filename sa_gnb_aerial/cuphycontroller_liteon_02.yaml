@@ -29,9 +29,9 @@ nic_tput_alert_threshold_mbps: 85000
 
 cuphydriver_config:
 # Fields added for data collection
-  # datalake_core: 9 # Isolalted core
-  # datalake_address: localhost
-  # datalake_samples: 1000000 # Number of samples to collect for each UE/RNTI. Defaults to 1M
+  datalake_core: 9 # Isolalted core
+  datalake_address: localhost
+  datalake_samples: 1000000000 # Number of samples to collect for each UE/RNTI. Defaults to 1M
   standalone: 0
   validation: 0
   num_slots: 8
