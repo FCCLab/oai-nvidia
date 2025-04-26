@@ -19,3 +19,7 @@ docker cp "$CONTAINER_ID:$SRC_DIR" "$DEST_DIR"
 docker rm "$CONTAINER_ID"
 
 echo "Directory copied to $DEST_DIR"
+
+
+# cd $cuBB_SDK/pyaerial/notebooks
+# jupyter lab --ip=0.0.0.0

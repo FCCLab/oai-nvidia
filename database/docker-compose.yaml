@@ -8,8 +8,8 @@ services:
       - "9000:9000"
       - "8123:8123"
     volumes:
-      - ./ch_data:/var/lib/clickhouse
-      - ./ch_logs:/var/log/clickhouse-server
+      - /home/data/nvidia/ch_data:/var/lib/clickhouse
+      - /home/data/nvidia/ch_logs:/var/log/clickhouse-server
     cap_add:
       - SYS_NICE
       - NET_ADMIN
