@@ -40,6 +40,7 @@ class ThroughputEstimatorBase(nn.Module):
         y_noise_level, y_target_throughput_mbps, y_max_throughput_mbps, p_noise_level, p_target_throughput_mbps, p_max_throughput_mbps = [], [], [], [], [], []  # Lists to store ground truth and predictions
         ws = []
         xs = []
+        self.eval()
         with torch.no_grad():  # Disable gradient computation
             for i, (batch_mac, batch_fapi, batch_iq, batch_y_noise_level, batch_y_target_throughput_mbps, batch_y_max_throughput_mbps) in enumerate(preloaded_test_data):
                 # Move to device
