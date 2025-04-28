@@ -141,7 +141,7 @@ cuphydriver_config:
       # fs_offset_dl: 0 -> PDSCH power per RE: -2 dBm 
       # fs_offset_dl: 5 -> PDSCH power pwer RE: -10.85 
       # fs_offset_dl: 12 -> PDSCH power per RE: -20 dBm
-      fs_offset_dl: 16
+      fs_offset_dl: 6
       # fs_offset_dl: 16
       # fs_offset_dl: 12
 
