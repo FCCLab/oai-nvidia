@@ -62,3 +62,6 @@ docker run --privileged \
             --userns=host --ipc=host \
             -v $NOTEBOOKS_DIR:/opt/nvidia/cuBB/pyaerial/notebooks \
             $PYAERIAL_IMAGE fixuid -q /bin/bash -c "$CMDS"
+
+# cd $cuBB_SDK/pyaerial/notebooks
+# jupyter lab --ip=0.0.0.0
