@@ -81,17 +81,20 @@ def load_dataset_v2(DATASET_PATH):
             if len(matching_mac) < 30:
                 continue
 
-            # Sort by TsTaiNs in descending order and get the 10 latest records
+            # Sort by TsTaiNs in descending order and get the 30 latest records
             matching_mac = matching_mac.sort_values(by='TsTaiNs', ascending=False).head(30)
+            matching_mac = matching_mac[['ss_rsrp', 'ss_rsrq', 'ss_sinr', 'ri', 'wb_cqi_1tb', 'cri', 'phr', 'pusch_snr', 'ul_mcs1', 'ul_bler', 'ul_harq_0', 'ul_harq_1', 'ul_harq_2', 'ul_harq_3']]
+            matching_mac.insert(3, 'p_a', 0)  # Insert P_a column after ss_sinr as OAI use fixed P_a = 0
+            # print(matching_mac.columns)
             # print(matching_mac)
-            matching_mac = matching_mac[['ss_rsrp', 'ss_rsrq', 'ss_sinr', 'ri', 'wb_cqi_1tb', 'cri', 'phr', 'pusch_snr', 'ul_mcs1', 'ul_bler', 'ul_harq_0', 'ul_harq_1', 'ul_harq_2', 'ul_harq_3']].to_numpy()
-            # print(matching_mac.shape) # (20, 14)
+            matching_mac = matching_mac.to_numpy()
+            # print(matching_mac.shape) # (30, 15)
             # print(matching_mac)
-            # Assuming matching_mac is the NumPy array with shape (n_samples, 14)
+            # Assuming matching_mac is the NumPy array with shape (n_samples, 15)
             # Columns: ['ss_rsrp', 'ss_rsrq', 'ss_sinr', 'ri', 'wb_cqi_1tb', 'cri', 'phr', 
             #           'pusch_snr', 'ul_mcs1', 'ul_bler', 'ul_harq_0', 'ul_harq_1', 'ul_harq_2', 'ul_harq_3']
 
-            # Assuming matching_mac is the NumPy array with shape (n_samples, 14)
+            # Assuming matching_mac is the NumPy array with shape (n_samples, 15)
             # Columns: ['ss_rsrp', 'ss_rsrq', 'ss_sinr', 'ri', 'wb_cqi_1tb', 'cri', 'phr', 
             #           'pusch_snr', 'ul_mcs1', 'ul_bler', 'ul_harq_0', 'ul_harq_1', 'ul_harq_2', 'ul_harq_3']
 
@@ -117,6 +120,7 @@ def load_dataset_v2(DATASET_PATH):
                 -44,  # ss_rsrp (dBm)
                 -3,   # ss_rsrq (dB)
                 30,   # ss_sinr (dB)
+                3,   # p_a
                 4,    # ri
                 15,   # wb_cqi_1tb
                 7,    # cri
@@ -134,6 +138,7 @@ def load_dataset_v2(DATASET_PATH):
                 -140,  # ss_rsrp
                 -20,   # ss_rsrq
                 -20,   # ss_sinr
+                -3,     # p_a
                 1,     # ri
                 0,     # wb_cqi_1tb
                 0,     # cri
@@ -269,9 +274,12 @@ def load_dataset_v1(DATASET_PATH):
 
             # Sort by TsTaiNs in descending order and get the 10 latest records
             matching_mac = matching_mac.sort_values(by='TsTaiNs', ascending=False).head(30)
+            matching_mac = matching_mac[['ss_rsrp', 'ss_rsrq', 'ss_sinr', 'ri', 'wb_cqi_1tb', 'cri', 'phr', 'pusch_snr', 'ul_mcs1', 'ul_bler', 'ul_harq_0', 'ul_harq_1', 'ul_harq_2', 'ul_harq_3']]
             # print(matching_mac)
-            matching_mac = matching_mac[['ss_rsrp', 'ss_rsrq', 'ss_sinr', 'ri', 'wb_cqi_1tb', 'cri', 'phr', 'pusch_snr', 'ul_mcs1', 'ul_bler', 'ul_harq_0', 'ul_harq_1', 'ul_harq_2', 'ul_harq_3']].to_numpy()
-            # print(matching_mac.shape) # (20, 14)
+            matching_mac.insert(3, 'p_a', 0)  # Insert P_a column after ss_sinr as OAI use fixed P_a = 0
+            # print(matching_mac.columns)
+            matching_mac = matching_mac.to_numpy()
+            # print(matching_mac.shape) # (20, 15)
             # print(matching_mac)
             # Assuming matching_mac is the NumPy array with shape (n_samples, 14)
             # Columns: ['ss_rsrp', 'ss_rsrq', 'ss_sinr', 'ri', 'wb_cqi_1tb', 'cri', 'phr', 
@@ -303,6 +311,7 @@ def load_dataset_v1(DATASET_PATH):
                 -44,  # ss_rsrp (dBm)
                 -3,   # ss_rsrq (dB)
                 30,   # ss_sinr (dB)
+                3,   # p_a
                 4,    # ri
                 15,   # wb_cqi_1tb
                 7,    # cri
@@ -320,6 +329,7 @@ def load_dataset_v1(DATASET_PATH):
                 -140,  # ss_rsrp
                 -20,   # ss_rsrq
                 -20,   # ss_sinr
+                -3,     # p_a
                 1,     # ri
                 0,     # wb_cqi_1tb
                 0,     # cri
@@ -428,17 +438,18 @@ def plot_metrics(dataset):
         'ss_rsrp_s': np.average(np.stack(dataset['mac'])[:,:,0], axis=1),
         'ss_rsrq_s': np.average(np.stack(dataset['mac'])[:,:,1], axis=1),
         'ss_sinr_s': np.average(np.stack(dataset['mac'])[:,:,2], axis=1),
-        'ri_s': np.average(np.stack(dataset['mac'])[:,:,3], axis=1),
-        'wb_cqi_1tb_s': np.average(np.stack(dataset['mac'])[:,:,4], axis=1),
-        'cri_s': np.average(np.stack(dataset['mac'])[:,:,5], axis=1),
-        'phr_s': np.average(np.stack(dataset['mac'])[:,:,6], axis=1),
-        'pusch_snr_s': np.average(np.stack(dataset['mac'])[:,:,7], axis=1),
-        'ul_mcs1_s': np.average(np.stack(dataset['mac'])[:,:,8], axis=1),
-        'ul_bler_s': np.average(np.stack(dataset['mac'])[:,:,9], axis=1),
-        'ul_harq_0_s': np.average(np.stack(dataset['mac'])[:,:,10], axis=1),
-        'ul_harq_1_s': np.average(np.stack(dataset['mac'])[:,:,11], axis=1),
-        'ul_harq_2_s': np.average(np.stack(dataset['mac'])[:,:,12], axis=1),
-        'ul_harq_3_s': np.average(np.stack(dataset['mac'])[:,:,13], axis=1),
+        'p_a_s': np.average(np.stack(dataset['mac'])[:,:,3], axis=1),
+        'ri_s': np.average(np.stack(dataset['mac'])[:,:,4], axis=1),
+        'wb_cqi_1tb_s': np.average(np.stack(dataset['mac'])[:,:,5], axis=1),
+        'cri_s': np.average(np.stack(dataset['mac'])[:,:,6], axis=1),
+        'phr_s': np.average(np.stack(dataset['mac'])[:,:,7], axis=1),
+        'pusch_snr_s': np.average(np.stack(dataset['mac'])[:,:,8], axis=1),
+        'ul_mcs1_s': np.average(np.stack(dataset['mac'])[:,:,9], axis=1),
+        'ul_bler_s': np.average(np.stack(dataset['mac'])[:,:,10], axis=1),
+        'ul_harq_0_s': np.average(np.stack(dataset['mac'])[:,:,11], axis=1),
+        'ul_harq_1_s': np.average(np.stack(dataset['mac'])[:,:,12], axis=1),
+        'ul_harq_2_s': np.average(np.stack(dataset['mac'])[:,:,13], axis=1),
+        'ul_harq_3_s': np.average(np.stack(dataset['mac'])[:,:,14], axis=1),
     }
     fig, axs = plt.subplots(len(plot_metrics), 1, figsize=(12, 3*len(plot_metrics)))
     for i, (key, value) in enumerate(plot_metrics.items()):
@@ -488,7 +499,7 @@ def dataset_to_train_test_split(dataset):
 
     # Size setup
     dataset_size = len(tdataset)
-    train_size = int(0.8 * dataset_size)
+    train_size = int(0.9 * dataset_size)
     test_size = dataset_size - train_size
 
     # Generate a random permutation of indices
