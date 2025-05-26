@@ -1,5 +1,5 @@
 diff --git a/cuPHY-CP/scfl2adapter/lib/scf_5g_fapi/scf_5g_fapi_phy.cpp b/cuPHY-CP/scfl2adapter/lib/scf_5g_fapi/scf_5g_fapi_phy.cpp
-index ea2e007c..258666e1 100755
+index ea2e007ce..258666e1c 100755
 --- a/cuPHY-CP/scfl2adapter/lib/scf_5g_fapi/scf_5g_fapi_phy.cpp
 +++ b/cuPHY-CP/scfl2adapter/lib/scf_5g_fapi/scf_5g_fapi_phy.cpp
 @@ -2557,6 +2557,29 @@ void phy::on_config_request(scf_fapi_config_request_msg_t& config_request, const

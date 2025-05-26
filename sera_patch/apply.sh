@@ -3,9 +3,9 @@
 cd ..
 
 cd cuBB
-patch -p1 < ../sera_patch/cubb-patch.diff
+git apply ../sera_patch/cubb.diff
 cd ..
 
 cd openairinterface5g
-patch -p1 < ../sera_patch/openairinterface5g-patch.diff
+git apply ../sera_patch/oai.diff
 cd ..
