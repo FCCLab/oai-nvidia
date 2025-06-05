@@ -2,15 +2,27 @@
 
 # Check if the network interface exists
 INTERFACE="aerial0.d9"
+
+if [ "$1" = "sera" ]; then
+    INTERFACE_IP="192.168.9.100"
+    SSH_HOST="192.168.9.9"
+elif [ "$1" = "metanoia" ]; then
+    INTERFACE_IP="192.168.1.100"
+    SSH_HOST="192.168.1.3"
+fi
+
+MAX_ATTEMPTS=30  # Maximum number of ping attempts
+ATTEMPT=1
+
 if ! ip link show "$INTERFACE" >/dev/null 2>&1; then
   echo "Error: Network interface $INTERFACE does not exist."
   exit 1
 fi
 
 # Configure the network interface
-sudo ifconfig "$INTERFACE" 192.168.9.100/24 || {
-  echo "Error: Failed to configure $INTERFACE with IP 192.168.9.100/24."
-  exit 1
+sudo ip addr add "$INTERFACE_IP/24" dev "$INTERFACE" || {
+  echo "Error: Failed to configure $INTERFACE with IP $INTERFACE_IP/24."
+  # exit 1
 }
 
 # Check if sshpass is installed
@@ -20,10 +32,6 @@ if ! command -v sshpass >/dev/null 2>&1; then
 fi
 
 # Ping the target host until successful
-SSH_HOST="192.168.9.9"
-MAX_ATTEMPTS=30  # Maximum number of ping attempts
-ATTEMPT=1
-
 echo "Attempting to ping $SSH_HOST at $(date)"
 while [ $ATTEMPT -le $MAX_ATTEMPTS ]; do
     echo "Ping attempt $ATTEMPT of $MAX_ATTEMPTS..."
