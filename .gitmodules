@@ -7,3 +7,6 @@
 [submodule "kobuki"]
 	path = kobuki
 	url = https://github.com/tuannv-github/kobuki.git
+[submodule "quectel"]
+	path = quectel
+	url = https://github.com/FCCLab/quectel.git

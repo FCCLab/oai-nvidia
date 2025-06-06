@@ -1,0 +1,162 @@
+services:
+    mysql:
+        container_name: "mysql"
+        image: mysql:8.0
+        volumes:
+            - ./database/oai_db.sql:/docker-entrypoint-initdb.d/oai_db.sql
+            - ./healthscripts/mysql-healthcheck.sh:/tmp/mysql-healthcheck.sh
+        environment:
+            - TZ=Europe/Paris
+            - MYSQL_DATABASE=oai_db
+            - MYSQL_USER=test
+            - MYSQL_PASSWORD=test
+            - MYSQL_ROOT_PASSWORD=linux
+        healthcheck:
+            test: /bin/bash -c "/tmp/mysql-healthcheck.sh"
+            interval: 5s
+            timeout: 2s
+            retries: 10
+        networks:
+            oai-cn5g:
+                ipv4_address: 192.168.70.131
+                
+    ims:
+        container_name: "ims"
+        image: ims:latest
+        volumes:
+            - ./conf/sip.conf:/etc/asterisk/sip.conf
+            - ./conf/users.conf:/etc/asterisk/users.conf
+        healthcheck:
+            test: /bin/bash -c "pgrep asterisk"
+            interval: 5s
+            timeout: 2s
+            retries: 10
+        networks:
+            oai-cn5g:
+                ipv4_address: 192.168.70.139
+    oai-udr:
+        container_name: "oai-udr"
+        image: oai-udr:develop
+        expose:
+            - 80/tcp
+            - 8080/tcp
+        volumes:
+            - ./conf/config.yaml:/openair-udr/etc/config.yaml
+        environment:
+            - TZ=Europe/Paris
+        depends_on:
+            - mysql
+            - oai-nrf
+        networks:
+            oai-cn5g:
+                ipv4_address: 192.168.70.136
+    oai-udm:
+        container_name: "oai-udm"
+        image: oai-udm:develop
+        expose:
+            - 80/tcp
+            - 8080/tcp
+        volumes:
+            - ./conf/config.yaml:/openair-udm/etc/config.yaml
+        environment:
+            - TZ=Europe/Paris
+        depends_on:
+            - oai-udr
+        networks:
+            oai-cn5g:
+                ipv4_address: 192.168.70.137
+    oai-ausf:
+        container_name: "oai-ausf"
+        image: oai-ausf:develop
+        expose:
+            - 80/tcp
+            - 8080/tcp
+        volumes:
+            - ./conf/config.yaml:/openair-ausf/etc/config.yaml
+        environment:
+            - TZ=Europe/Paris
+        depends_on:
+            - oai-udm
+        networks:
+            oai-cn5g:
+                ipv4_address: 192.168.70.138
+    oai-nrf:
+        container_name: "oai-nrf"
+        image: oai-nrf:develop
+        expose:
+            - 80/tcp
+            - 8080/tcp
+        volumes:
+            - ./conf/config.yaml:/openair-nrf/etc/config.yaml
+        environment:
+            - TZ=Europe/Paris
+        networks:
+            oai-cn5g:
+                ipv4_address: 192.168.70.130
+    oai-amf:
+        container_name: "oai-amf"
+        image: oai-amf:develop
+        expose:
+            - 80/tcp
+            - 8080/tcp
+            - 38412/sctp
+        volumes:
+            - ./conf/config.yaml:/openair-amf/etc/config.yaml
+        environment:
+            - TZ=Europe/Paris
+        depends_on:
+            - mysql
+            - oai-nrf
+            - oai-ausf
+        networks:
+            oai-cn5g:
+                ipv4_address: 192.168.70.132
+    oai-smf:
+        container_name: "oai-smf"
+        image: oai-smf:develop
+        expose:
+            - 80/tcp
+            - 8080/tcp
+            - 8805/udp
+        volumes:
+            - ./conf/config.yaml:/openair-smf/etc/config.yaml
+        environment:
+            - TZ=Europe/Paris
+        depends_on:
+            - oai-nrf
+            - oai-amf
+        networks:
+            oai-cn5g:
+                ipv4_address: 192.168.70.133
+    oai-upf:
+        container_name: "oai-upf"
+        image: oai-upf:develop
+        expose:
+            - 2152/udp
+            - 8805/udp
+        volumes:
+            - ./conf/config.yaml:/openair-upf/etc/config.yaml
+        environment:
+            - TZ=Europe/Paris
+        depends_on:
+            - oai-nrf
+            - oai-smf
+        cap_add:
+            - NET_ADMIN
+            - SYS_ADMIN
+        cap_drop:
+            - ALL
+        privileged: true
+        networks:
+            oai-cn5g:
+                ipv4_address: 192.168.70.134
+
+networks:
+    oai-cn5g:
+        driver: bridge
+        name: oai-cn5g
+        ipam:
+            config:
+                - subnet: 192.168.70.128/26
+        driver_opts:
+            com.docker.network.bridge.name: "oai-cn5g"
