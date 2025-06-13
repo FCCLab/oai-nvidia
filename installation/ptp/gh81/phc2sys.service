@@ -1,0 +1,19 @@
+[Unit]
+Description=Synchronize system clock or PTP hardware clock (PHC)
+Documentation=man:phc2sys
+Requires=ptp4l.service
+After=ptp4l.service
+
+[Service]
+Restart=always
+RestartSec=5s
+Type=simple
+# Gives ptp4l a chance to stabilize
+ExecStartPre=sleep 2
+# Sync system clock to TAI time scale
+ExecStart=/bin/sh -c "/usr/sbin/phc2sys -s /dev/ptp$(ethtool -T aerial00 | grep PTP | awk '{print $4}') -c CLOCK_REALTIME -n 24 -O 0 -R 256 -u 256"
+# Sync system clock to UTC time scale
+#ExecStart=/bin/sh -c "/usr/sbin/phc2sys -s /dev/ptp$(ethtool -T aerial00 | grep PTP | awk '{print $4}') -c CLOCK_REALTIME -n 24 -w -R 256 -u 256"
+
+[Install]
+WantedBy=multi-user.target
