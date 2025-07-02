@@ -1,0 +1,34 @@
+services:
+  nv-cubb:
+    container_name: nv-cubb-liteon02
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities:
+                - gpu
+    network_mode: host
+    shm_size: 4096m
+    privileged: true
+    stdin_open: true
+    tty: true
+    volumes:
+      - /lib/modules:/lib/modules
+      - /dev/hugepages:/dev/hugepages
+
+      - ./aerial_l1_entrypoint.sh:/opt/nvidia/cuBB/aerial_l1_entrypoint.sh # Entry Point
+      - ../../cuBB:/opt/nvidia/cuBB                                           # cuBB
+      - ./:/opt/nvidia/cuBB/cuPHY-CP/cuphycontroller/config/               # Config file
+    userns_mode: host
+    ipc: "host"
+    image: nvcr.io/qhrjhjrvlsbu/aerial-cuda-accelerated-ran:24-3-cubb
+    environment:
+      - cuBB_SDK=/opt/nvidia/cuBB
+    # command: bash -c "sudo rm -rf /tmp/phy.log && sudo chmod +x /opt/nvidia/cuBB/aerial_l1_entrypoint.sh && /opt/nvidia/cuBB/aerial_l1_entrypoint.sh"
+    healthcheck:
+      test: ["CMD-SHELL",'grep -q "L1 is ready!" /tmp/phy.log && echo 0 || echo 1']
+      interval: 20s
+      timeout: 5s
+      retries: 5
