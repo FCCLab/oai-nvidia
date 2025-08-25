@@ -7,7 +7,7 @@ GRUB_DEFAULT="Advanced options for Ubuntu>Ubuntu, with Linux 6.8.0-1026-nvidia-6
 GRUB_TIMEOUT_STYLE=hidden
 GRUB_TIMEOUT=0
 GRUB_DISTRIBUTOR=`lsb_release -i -s 2> /dev/null || echo Debian`
-GRUB_CMDLINE_LINUX_DEFAULT="pci=realloc=off pci=pcie_bus_safe default_hugepagesz=512M hugepagesz=512M hugepages=48 tsc=reliable processor.max_cstate=0 audit=0 idle=poll rcu_nocb_poll nosoftlockup irqaffinity=0 isolcpus=managed_irq,domain,4-64 nohz_full=4-64 rcu_nocbs=4-64 earlycon module_blacklist=nouveau acpi_power_meter.force_cap_on=y numa_balancing=disable init_on_alloc=0 preempt=none"
+GRUB_CMDLINE_LINUX_DEFAULT="pci=realloc=off pci=pcie_bus_safe default_hugepagesz=512M hugepagesz=512M hugepages=48 tsc=reliable processor.max_cstate=0 audit=0 idle=poll rcu_nocb_poll nosoftlockup irqaffinity=0 isolcpus=managed_irq,domain,4-35 nohz_full=4-35 rcu_nocbs=4-35 earlycon module_blacklist=nouveau acpi_power_meter.force_cap_on=y numa_balancing=disable init_on_alloc=0 preempt=none"
 
 # Uncomment to enable BadRAM filtering, modify to suit your needs
 # This works with Linux (no patch required) and with any kernel that obtains
