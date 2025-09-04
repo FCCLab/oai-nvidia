@@ -1,0 +1,42 @@
+diff --git a/cuPHY-CP/scfl2adapter/lib/scf_5g_fapi/scf_5g_fapi_phy.cpp b/cuPHY-CP/scfl2adapter/lib/scf_5g_fapi/scf_5g_fapi_phy.cpp
+index ea2e007c..258666e1 100755
+--- a/cuPHY-CP/scfl2adapter/lib/scf_5g_fapi/scf_5g_fapi_phy.cpp
++++ b/cuPHY-CP/scfl2adapter/lib/scf_5g_fapi/scf_5g_fapi_phy.cpp
+@@ -2557,6 +2557,29 @@ void phy::on_config_request(scf_fapi_config_request_msg_t& config_request, const
+                     uint16_t k = 0;
+                     for (int i = 0; i < valid_entries; i++) {
+                         auto& slot_cfg = phy_config.tdd_table_.s_detail[i];
++                        if (i < 7) { // 7 Downlink
++                            slot_cfg.type = slot_command_api::SLOT_DOWNLINK;
++                            slot_cfg.start_sym_dl = 0;
++                            slot_cfg.max_dl_symbols = 14;
++                            slot_cfg.start_sym_ul = -1;
++                            slot_cfg.max_ul_symbols = 0;
++                        }
++                        if (i == 7) // 1 special slot
++                        {
++                            slot_cfg.type = slot_command_api::SLOT_SPECIAL;
++                            slot_cfg.start_sym_dl = 0;
++                            slot_cfg.max_dl_symbols = 6;
++                            slot_cfg.start_sym_ul = 10;
++                            slot_cfg.max_ul_symbols = 4;
++                        }
++                        if ( i > 7){ // 2 Uplink
++                            slot_cfg.type = slot_command_api::SLOT_UPLINK;
++                            slot_cfg.start_sym_dl = -1;
++                            slot_cfg.max_dl_symbols = 0;
++                            slot_cfg.start_sym_ul = 0;
++                            slot_cfg.max_ul_symbols = 14;
++                        }
++#if 0
+                         slot_cfg.max_dl_symbols = 0;
+                         slot_cfg.max_ul_symbols = 0;
+                         slot_cfg.start_sym_dl = -1;
+@@ -2584,6 +2607,7 @@ void phy::on_config_request(scf_fapi_config_request_msg_t& config_request, const
+                         } else {
+                             slot_cfg.type = slot_command_api::SLOT_NONE;
+                         }
++#endif // 0
+                         NVLOGD_FMT(TAG, "Slot type = {}, DL symbols = {}, UL symbols = {} Start DL = {} Start UL = {}", slot_cfg.type, slot_cfg.max_dl_symbols, slot_cfg.max_ul_symbols, slot_cfg.start_sym_dl, slot_cfg.start_sym_ul);
+                         k += OFDM_SYMBOLS_PER_SLOT;
+                     }

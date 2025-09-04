@@ -1,9 +1,9 @@
 {
     "files.associations": {
-        "*.sqlbook": "sql",
-        "*.ndjson": "jsonl",
         "*.dbclient-js": "javascript",
         "*.config": "makefile",
+        "*.sqlbook": "sql",
+        "*.ndjson": "jsonl",
         "optional": "c",
         "istream": "c",
         "ostream": "c",
@@ -76,6 +76,7 @@
         "typeindex": "cpp",
         "typeinfo": "cpp",
         "semaphore": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "*.inc": "c"
     }
 }
