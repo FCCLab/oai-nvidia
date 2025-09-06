@@ -7,3 +7,6 @@
 [submodule "quectel"]
 	path = quectel
 	url = https://github.com/FCCLab/quectel.git
+[submodule "cuBB_docs"]
+	path = cuBB_docs
+	url = https://github.com/FCCLab/cuBB_docs.git
